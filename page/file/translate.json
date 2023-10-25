@@ -1,0 +1,143 @@
+{
+    "kucing": {   
+        "en":"Cat", 
+        "id":"Kucing"
+    },
+    "anjing": {
+        "en":"Dog", 
+        "id":"Anjing"
+    },
+    "monyet": {
+        "en":"Monkey", 
+        "id":"Monyet"
+    },
+    "zebra": {
+        "en":"Zebra", 
+        "id":"Zebra"
+    },
+    "singa": {
+        "en":"Lion", 
+        "id":"Singa"
+    },
+    "harimau": {
+        "en":"Tiger", 
+        "id":"Harimau"
+    },
+    "badak": {
+        "en":"Rhinoceros", 
+        "id":"Badak"
+    },
+    "lumba-lumba": {
+        "en":"Dolphin", 
+        "id":"Lumba lumba"
+    },
+    "paus": {
+        "en":"Whale", 
+        "id":"Paus"
+    },
+    "Hiu": {
+        "en":"Shark", 
+        "id":"Hiu"
+    },
+    "Gurita": {
+        "en":"Octopus", 
+        "id":"Gurita"
+    },
+    "bintanglaut": {
+        "en":"Starfish", 
+        "id":"Bintang laut"
+    },
+    "Kupu-kupu": {
+        "en":"Butterfly", 
+        "id":"Kupu kupu"
+    },
+    "elang": {
+        "en":"eagle", 
+        "id":"elang"
+    },
+    "burunghantu": {
+        "en":"Owl", 
+        "id":"Burung hantu"
+    },
+    "kelelawar": {
+        "en":"Bat", 
+        "id":"Kelelawar"
+    },
+    "burungbeo": {
+        "en":"Parrot", 
+        "id":"Burung beo"
+    },
+    "flamingo": {
+        "en":"Flamingo", 
+        "id":"Flamingo"
+    },
+    "burungcendrawasih": 
+    {
+        "en":"Birds of paradise", 
+        "id":"Burung cendrawasih"
+    },
+    "burungunta": {
+        "en":"Ostrich", 
+        "id":"Burung unta"
+    },
+    "burungmerak": {
+        "en":"Peacock", 
+        "id":"Burung merak"
+    },
+    "burungpelikan": {
+        "en":"Pelicans", 
+        "id":"Burung pelikan"
+    },
+    "komodo": {
+        "en":"Komodo", 
+        "id":"Komodo"
+    },
+    "platipus": {
+        "en":"Platypus", 
+        "id":"Platipus"
+    },
+    "bunglon": {
+        "en":"chameleon", 
+        "id":"bunglon"
+    },
+    "penguin": {
+        "en":"Pinguin", 
+        "id":"Penguin"
+    },
+    "kanguru": {
+        "en":"Kangaroo", 
+        "id":"Kanguru"
+    },
+    "anjinglaut": {
+        "en":"Seal", 
+        "id":"Anjing laut"
+    },
+    "ikanbadut": {
+        "en":"Clownfish", 
+        "id":"Ikan badut"
+    },
+    "cumi-cumi": {
+        "en":"Squid", 
+        "id":"Cumi cumi"
+    },
+    "ular": {
+        "en":"Snake", 
+        "id":"Ular"
+    },
+    "beruang kutub": {
+        "en":"Polarbear", 
+        "id":"Beruang kutub"
+    },
+    "tikus": {
+        "en":"Mouse", 
+        "id":"Tikus"
+    },
+    "trenggiling": {
+        "en":"Pangolin", 
+        "id":"Trenggiling"
+    },
+    "landak": {
+        "en":"Porcupine", 
+        "id":"Landak"
+    }
+}
