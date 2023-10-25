@@ -6,29 +6,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Klasifikasi hewan</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
-
   </head>
   <body>
-    <div id="video-container">
-      <video autoplay="true" id="video-webcam">
-        Browser tidak mendukung, silahkan update!!
-      </video>
-      <img
-        style="height: 80px; width: 80px"
-        src="{% static 'img/ic_capture.png' %}"
-        alt=""
-        id="take-picture-button"
-        onclick="takeSnapshot()"
+    <form action="cek">
+      <div id="video-container">
+        <video autoplay="true" id="video-webcam">
+          Browser tidak mendukung, silahkan update!!
+        </video>
+        <img
+          style="height: 80px; width: 80px"
+          src="{% static 'img/ic_capture.png' %}"
+          alt=""
+          id="take-picture-button"
+          onclick="takeSnapshot()"
+        />
+      </div>
+      <button id="btnreset" onclick="resetSnapshot()">Reset Gambar</button>
+      <input
+        type="file"
+        accept="image/*"
+        id="file-input"
+        onchange="loadImage()"
+        name="gmbr"
       />
-      <!-- <button id="take-picture-button" onclick="takeSnapshot()">Ambil Gambar</button> -->
-    </div>
-    <button id="btnreset" onclick="resetSnapshot()">Reset Gambar</button>
-    <input
-      type="file"
-      accept="image/*"
-      id="file-input"
-      onchange="loadImage()"
-    />
+      <button type="submit">GAZZ</button>
+    </form>
+    <h1>{{logic}}</h1>
+    <h1>{{logic2}}</h1>
     <script src="{% static 'js/script.js' %}"></script>
   </body>
 </html>
