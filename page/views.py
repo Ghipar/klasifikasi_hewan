@@ -1,52 +1,59 @@
 from django.shortcuts import render
-import base64
-from io import BytesIO
-
-import firebase_admin
-import numpy as np
+from django.core.files.storage import FileSystemStorage
+from keras.models import load_model
+from keras.preprocessing import image
 from fastai.vision.all import *
 import json
-from firebase_admin import credentials, firestore
-import pathlib
+import tensorflow as tf
+from tensorflow import Graph
+import numpy as np
+import io
+from django.http import HttpResponse
 
+names = json.load(open("./file/translate.json"))
+model= load_learner('./file/model.pkl')
 
-temp = pathlib.PosixPath
-pathlib.PosixPath = pathlib.WindowsPath
-
-cred = credentials.Certificate("file/firebaseKey.json")
-app = firebase_admin.initialize_app(cred)
-db = firestore.client()
-
-learn = load_learner("model.pkl")
-names = json.load(open("translate.json"))
-# Create your views here.
 def index(request):
-    context = {
-        'nama': 'hello world'
-    }
+    context = {'a':1}
     return render(request, 'index.html', context)
-def cek(request):
-      buffered = BytesIO()
-      request.GET['gmbr'].save(buffered, format="JPEG")
-      img_str = base64.b64encode(buffered.getvalue())
-      pred, idx, probs = learn.predict(np.asarray(request.GET['gmbr']))
-      db.collection("preds").add(  # inilo db
-          {
-              "image": img_str,
-              "prediction": pred.title(),
-              "time_added": firestore.SERVER_TIMESTAMP,
-          }
-      )
-      id_fruit_name_col = gr.Textbox(visible=True)
-      en_fruit_name_col = gr.Textbox(visible=False)
-      return [
-          names[pred]["id"],
-          f"./audios/Id/" + names[pred]["id"] + ".mp3",
-          id_fruit_name_col,
-          en_fruit_name_col,
-      ]
-  
-    #   val1 = request.GET['gmbr']
-    #   val2 = request.GET['gmbr']
+def predictId(request):
+    if request.method == 'POST':
+        try:
+            print(request.FILES['gmbr'])
+            # Get and load the image
+            file_obj = request.FILES['gmbr']
+            # Use the uploaded image directly without saving it
+            image_data = file_obj.read()
+            img = image.load_img(io.BytesIO(image_data), target_size=(200, 200))
+            # Predict
+            pred = model.predict(img)
+            # Post values to HTML
+            predId = names[pred[0]]["id"]
+           
+            return HttpResponse(predId)
 
-    # return render(request, 'index.html', {'logic':val1, 'logic2':val2,})
+        except Exception as e:
+            print(f"Error processing the uploaded file: {e}")
+     
+    return HttpResponse(predId)
+
+def predictEn(request):
+    if request.method == 'POST':
+        try:
+            # Get and load the image
+            file_obj = request.FILES['gmbr']
+            # Use the uploaded image directly without saving it
+            image_data = file_obj.read()
+            img = image.load_img(io.BytesIO(image_data), target_size=(200, 200))
+            # Predict
+            pred = model.predict(img)
+            # Post values to HTML
+            predEn = names[pred[0]]["en"]
+           
+            return HttpResponse(predEn)
+
+        except Exception as e:
+            print(f"Error processing the uploaded file: {e}")
+     
+    return HttpResponse(predEn)
+    

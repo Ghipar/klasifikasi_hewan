@@ -1,10 +1,15 @@
+/* audio {
+  display: none;
+} */
+
 #video-container {
   width: 640px; /* Set your desired width */
   height: 480px; /* Set your desired height */
   position: relative;
   border: 5px solid #054502; /* Old green color border */
   border-radius: 50px; /* Rounded corners */
-  overflow: hidden;;
+  overflow: hidden;
+
 }
 
 #video-container img {
@@ -20,11 +25,12 @@
   transform: translateX(-50%);
   /* visibility: hidden; */
 }
-#btnreset{
+#btnreset {
   margin-top: 20px;
   margin-left: 20px;
 }
-#file-input{
+#file-input {
   color: transparent;
   margin-left: 27%;
+  margin-top: 3%;
 }

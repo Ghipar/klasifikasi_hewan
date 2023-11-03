@@ -1,0 +1,198 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Klasifikasi hewan</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+      integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+  </head>
+  <body>
+    <form method="post" enctype="multipart/form-data" id="myForm">
+      <div id="video-container">
+        <video autoplay="true" id="video-webcam">
+          Browser tidak mendukung, silahkan update!!
+        </video>
+        <img
+          style="height: 80px; width: 80px"
+          src="{% static 'img/ic_capture.png' %}"
+          alt=""
+          id="take-picture-button"
+          onclick="takeSnapshot()"
+        />
+      </div>
+      {% csrf_token %}
+      <!-- input file gambar -->
+      <button type="button" id="btnreset" onclick="resetSnapshot()">
+        Reset Gambar
+      </button>
+      <input
+        type="file"
+        accept="image/*"
+        id="file-input"
+        onchange="loadImage()"
+        name="gmbr"
+      />
+      <!-- <input type="hidden" name="csrf_token" value="{% csrf_token %}" /> -->
+      <input type="submit" name="submit_button" value="INDO" />
+      <input type="submit" name="submit_button" value="EN" />
+    </form>
+
+    <audio id="myAudioId" autoplay>
+      <source src="{% static 'audios/Id/' %}{{predId}}.mp3" type="audio/mpeg" />
+      Your browser does not support the audio element.
+    </audio>
+    <audio id="myAudioEn" autoplay>
+      <source src="{% static 'audios/En/' %}{{predEn}}.mp3" type="audio/mpeg" />
+      Your browser does not support the audio element.
+    </audio>
+    <h1 id="nameId">{{predId}}</h1>
+    <h1 id="nameEn">{{predEn}}</h1>
+
+    <script type="text/javascript">
+      var video = document.querySelector("#video-webcam");
+      var fileInput = document.querySelector("#file-input");
+      var takePictureButton = document.querySelector("#take-picture-button");
+
+      navigator.getUserMedia =
+        navigator.getUserMedia ||
+        navigator.webkitGetUserMedia ||
+        navigator.mozGetUserMedia ||
+        navigator.msGetUserMedia ||
+        navigator.oGetUserMedia;
+
+      if (navigator.getUserMedia) {
+        navigator.getUserMedia({ video: true }, handleVideo, videoError);
+      }
+
+      $(document).on("click", "#myForm input[type='submit']", function (e) {
+        const audioElement = document.getElementById("myAudioId");
+        const audioElement1 = document.getElementById("myAudioEn");
+        e.preventDefault();
+
+        var formData = new FormData($("#myForm")[0]); // Create a FormData object from the form
+        formData.append(
+          "csrfmiddlewaretoken",
+          $("input[name=csrfmiddlewaretoken]").val()
+        ); // Include the CSRF token
+
+        formData.append("gmbr", $("#file-input")[0].files[0]);
+
+        var buttonValue = $(this).val(); // Get the value of the clicked button
+
+        if (buttonValue === "INDO") {
+          $.ajax({
+            type: "POST",
+            url: "{% url 'predictId' %}",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+              console.log(data);
+              $("#nameId").html(data);
+              audioElement.src = "{% static 'audios/Id/' %}" + data + ".mp3"; // Handle the response data as needed
+              document.getElementById("nameId").style.display = "inline";
+              document.getElementById("nameEn").style.display = "none";
+            },
+            error: function (xhr, status, error) {
+              console.error(xhr, status, error);
+            },
+          });
+        } else if (buttonValue === "EN") {
+          $.ajax({
+            type: "POST",
+            url: "{% url 'predictEn' %}",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+              console.log(data);
+              $("#nameEn").html(data);
+              audioElement.src = "{% static 'audios/En/' %}" + data + ".mp3"; // Handle the response data as needed
+              document.getElementById("nameId").style.display = "none";
+              document.getElementById("nameEn").style.display = "inline";
+            },
+            error: function (xhr, status, error) {
+              console.error(xhr, status, error);
+            },
+          });
+        }
+      });
+
+      function handleVideo(stream) {
+        video.srcObject = stream;
+      }
+
+      function videoError(e) {
+        alert("Izinkan menggunakan webcam untuk demo!");
+      }
+
+      function loadImage() {
+        var file = fileInput.files[0];
+        if (file) {
+          var img = document.createElement("img");
+          img.src = URL.createObjectURL(file);
+
+          var videoContainer = document.getElementById("video-container");
+          videoContainer.innerHTML = "";
+          videoContainer.appendChild(img);
+
+          // Move the "Take Picture" button back inside the container
+          // videoContainer.appendChild(takePictureButton);
+        }
+      }
+
+      function takeSnapshot() {
+        if (!video) {
+          console.error("Video element not found.");
+          return;
+        }
+
+        var canvas = document.createElement("canvas");
+        var context = canvas.getContext("2d");
+
+        var width = video.offsetWidth;
+        var height = video.offsetHeight;
+
+        canvas.width = width;
+        canvas.height = height;
+
+        context.drawImage(video, 0, 0, width, height);
+
+        var img = document.createElement("img");
+        img.src = canvas.toDataURL("image/png");
+
+        var videoContainer = document.getElementById("video-container");
+        videoContainer.innerHTML = "";
+        videoContainer.appendChild(img);
+
+        // Move the "Take Picture" button back inside the container
+        // videoContainer.appendChild(takePictureButton);
+      }
+
+      function resetSnapshot() {
+        var videoContainer = document.getElementById("video-container");
+        videoContainer.innerHTML = "";
+        videoContainer.innerHTML =
+          '<video autoplay="true" id="video-webcam">Browsermu tidak mendukung bro, upgrade donk!</video>';
+        video = document.querySelector("#video-webcam");
+
+        if (navigator.getUserMedia) {
+          navigator.getUserMedia({ video: true }, handleVideo, videoError);
+        }
+
+        // Move the "Take Picture" button back inside the container
+        videoContainer.appendChild(takePictureButton);
+        document.getElementById("nameId").style.display = "none";
+        document.getElementById("nameEn").style.display = "none";
+        document.getElementById("file-input").value = '';
+      }
+    </script>
+  </body>
+</html>

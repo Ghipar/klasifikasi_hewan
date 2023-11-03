@@ -1,3 +1,4 @@
+
 var video = document.querySelector("#video-webcam");
 var fileInput = document.querySelector("#file-input");
 var takePictureButton = document.querySelector("#take-picture-button");
