@@ -12,54 +12,104 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     ></script>
+    <script
+      src="https://kit.fontawesome.com/75690d0497.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </head>
   <body>
-    <form method="post" enctype="multipart/form-data" id="myForm">
-      <div id="video-container">
-        <video autoplay="true" id="video-webcam">
-          Browser tidak mendukung, silahkan update!!
-        </video>
-        <img
-          style="height: 80px; width: 80px"
-          src="{% static 'img/ic_capture.png' %}"
-          alt=""
-          id="take-picture-button"
-          onclick="takeSnapshot()"
-        />
-      </div>
-      {% csrf_token %}
-      <!-- input file gambar -->
-      <button type="button" id="btnreset" onclick="resetSnapshot()">
-        Reset Gambar
-      </button>
-      <input
-        type="file"
-        accept="image/*"
-        id="file-input"
-        onchange="loadImage()"
-        name="gmbr"
-      />
-      <!-- <input type="hidden" name="csrf_token" value="{% csrf_token %}" /> -->
-      <input type="submit" name="submit_button" value="INDO" />
-      <input type="submit" name="submit_button" value="EN" />
-    </form>
+    <div class="bg">
+      <div class="column">
+        <br />
 
-    <audio id="myAudioId" autoplay>
-      <source src="{% static 'audios/Id/' %}{{predId}}.mp3" type="audio/mpeg" />
-      Your browser does not support the audio element.
-    </audio>
-    <audio id="myAudioEn" autoplay>
-      <source src="{% static 'audios/En/' %}{{predEn}}.mp3" type="audio/mpeg" />
-      Your browser does not support the audio element.
-    </audio>
-    <h1 id="nameId">{{predId}}</h1>
-    <h1 id="nameEn">{{predEn}}</h1>
+        <form method="post" enctype="multipart/form-data" id="myForm">
+          <div id="video-container">
+            <video autoplay="true" id="video-webcam">
+              Browser tidak mendukung, silahkan update!!
+            </video>
+            <img
+              style="height: 80px; width: 80px"
+              src="{% static 'img/ic_capture.png' %}"
+              alt=""
+              id="take-picture-button"
+              onclick="takeSnapshot()"
+            />
+          </div>
+          {% csrf_token %}
+          <!-- input file gambar -->
+          <div class="inputan">
+            <button
+              class="fa-solid fa-rotate-right fa-xl"
+              style="color: #2f6d30"
+              type="button"
+              id="btnreset"
+              onclick="resetSnapshot()"
+            ></button>
+            <input
+              type="file"
+              accept="image/*"
+              id="file-input"
+              onchange="loadImage()"
+              name="gmbr"
+            />
+            <label id="inGmbr" for="file-input">Import Image</label>
+          </div>
+          <div class="btn">
+            <input
+              id="in"
+              type="image"
+              src="{% static 'img/btnId.png' %}"
+              alt="Submit"
+              name="submit_button"
+              value="INDO"
+            />
+            <input
+              id="en"
+              type="image"
+              src="{% static 'img/btnEn.png' %}"
+              name="submit_button"
+              value="EN"
+            />
+          </div>
+        </form>
+
+        <audio id="myAudioId" autoplay>
+          <source
+            src="{% static 'audios/Id/' %}{{predId}}.mp3"
+            type="audio/mpeg"
+          />
+          Your browser does not support the audio element.
+        </audio>
+        <audio id="myAudioEn" autoplay>
+          <source
+            src="{% static 'audios/En/' %}{{predEn}}.mp3"
+            type="audio/mpeg"
+          />
+          Your browser does not support the audio element.
+        </audio>
+      </div>
+
+      <div class="column2">
+        <br /><br /><br /><br /><br />
+        <br /><br /><br /><br /><br />
+        <br /><br /><br />
+        <div id="koin">
+          <br /><br />
+          <h1 id="nameId">{{predId}}</h1>
+        </div>
+        <div id="koen">
+          <br /><br />
+          <h1 id="nameEn">{{predEn}}</h1>
+        </div>
+      </div>
+    </div>
 
     <script type="text/javascript">
       var video = document.querySelector("#video-webcam");
       var fileInput = document.querySelector("#file-input");
       var takePictureButton = document.querySelector("#take-picture-button");
-
+      var blobi;
       navigator.getUserMedia =
         navigator.getUserMedia ||
         navigator.webkitGetUserMedia ||
@@ -71,7 +121,12 @@
         navigator.getUserMedia({ video: true }, handleVideo, videoError);
       }
 
-      $(document).on("click", "#myForm input[type='submit']", function (e) {
+      // document.getElementById("koin").style.display = "none";
+      // window.onbeforeunload = function () {
+      //   // Hide the div before the page is reloaded
+      // };
+
+      $(document).on("click", "#myForm input[type='image']", function (e) {
         const audioElement = document.getElementById("myAudioId");
         const audioElement1 = document.getElementById("myAudioEn");
         e.preventDefault();
@@ -87,41 +142,102 @@
         var buttonValue = $(this).val(); // Get the value of the clicked button
 
         if (buttonValue === "INDO") {
-          $.ajax({
-            type: "POST",
-            url: "{% url 'predictId' %}",
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function (data) {
-              console.log(data);
-              $("#nameId").html(data);
-              audioElement.src = "{% static 'audios/Id/' %}" + data + ".mp3"; // Handle the response data as needed
-              document.getElementById("nameId").style.display = "inline";
-              document.getElementById("nameEn").style.display = "none";
-            },
-            error: function (xhr, status, error) {
-              console.error(xhr, status, error);
-            },
-          });
+          //if lagi
+          if (document.getElementById("file-input").files.length == 0) {
+            try {
+              formData.append("gmbr", blobi, "image.jpg");
+              $.ajax({
+                type: "POST",
+                url: "{% url 'predictId' %}",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                  console.log(data);
+                  $("#nameId").html(data);
+                  audioElement.src =
+                    "{% static 'audios/Id/' %}" + data + ".mp3";
+                  document.getElementById("koin").style.display = "flex";
+                  document.getElementById("koen").style.display = "none";
+                  document.getElementById("nameId").style.display = "inline";
+                  document.getElementById("nameEn").style.display = "none";
+                },
+                error: function (xhr, status, error) {
+                  console.error(xhr, status, error);
+                },
+              });
+            } catch {
+              alert("Gambar tidak ditemukan!!\nMohon input gambar!!");
+            }
+          } else {
+            $.ajax({
+              type: "POST",
+              url: "{% url 'predictId' %}",
+              data: formData,
+              processData: false,
+              contentType: false,
+              success: function (data) {
+                console.log(data);
+                $("#nameId").html(data);
+                audioElement.src = "{% static 'audios/Id/' %}" + data + ".mp3";
+                document.getElementById("koin").style.display = "flex";
+                document.getElementById("koen").style.display = "none";
+                document.getElementById("nameId").style.display = "inline";
+                document.getElementById("nameEn").style.display = "none";
+              },
+              error: function (xhr, status, error) {
+                console.error(xhr, status, error);
+              },
+            });
+          }
         } else if (buttonValue === "EN") {
-          $.ajax({
-            type: "POST",
-            url: "{% url 'predictEn' %}",
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function (data) {
-              console.log(data);
-              $("#nameEn").html(data);
-              audioElement.src = "{% static 'audios/En/' %}" + data + ".mp3"; // Handle the response data as needed
-              document.getElementById("nameId").style.display = "none";
-              document.getElementById("nameEn").style.display = "inline";
-            },
-            error: function (xhr, status, error) {
-              console.error(xhr, status, error);
-            },
-          });
+          if (document.getElementById("file-input").files.length == 0) {
+            try {
+              formData.append("gmbr", blobi, "image.jpg");
+              $.ajax({
+                type: "POST",
+                url: "{% url 'predictEn' %}",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                  console.log(data);
+                  $("#nameEn").html(data);
+                  audioElement.src =
+                    "{% static 'audios/En/' %}" + data + ".mp3"; // Handle the response data as needed
+                  document.getElementById("koin").style.display = "none";
+                  document.getElementById("koen").style.display = "flex";
+                  document.getElementById("nameId").style.display = "none";
+                  document.getElementById("nameEn").style.display = "inline";
+                },
+                error: function (xhr, status, error) {
+                  console.error(xhr, status, error);
+                },
+              });
+            } catch {
+              alert("Gambar tidak ditemukan!!\nMohon input gambar!!");
+            }
+          } else {
+            $.ajax({
+              type: "POST",
+              url: "{% url 'predictEn' %}",
+              data: formData,
+              processData: false,
+              contentType: false,
+              success: function (data) {
+                console.log(data);
+                $("#nameEn").html(data);
+                audioElement.src = "{% static 'audios/En/' %}" + data + ".mp3"; // Handle the response data as needed
+                document.getElementById("koin").style.display = "none";
+                document.getElementById("koen").style.display = "flex";
+                document.getElementById("nameId").style.display = "none";
+                document.getElementById("nameEn").style.display = "inline";
+              },
+              error: function (xhr, status, error) {
+                console.error(xhr, status, error);
+              },
+            });
+          }
         }
       });
 
@@ -172,8 +288,8 @@
         videoContainer.innerHTML = "";
         videoContainer.appendChild(img);
 
-        // Move the "Take Picture" button back inside the container
-        // videoContainer.appendChild(takePictureButton);
+        var blob = dataURItoBlob(img.src);
+        blobi = blob;
       }
 
       function resetSnapshot() {
@@ -191,7 +307,22 @@
         videoContainer.appendChild(takePictureButton);
         document.getElementById("nameId").style.display = "none";
         document.getElementById("nameEn").style.display = "none";
-        document.getElementById("file-input").value = '';
+        document.getElementById("koen").style.display = "none";
+        document.getElementById("koin").style.display = "none";
+        document.getElementById("file-input").value = "";
+        blobi = "";
+      }
+
+      function dataURItoBlob(dataURI) {
+        var byteString = atob(dataURI.split(",")[1]);
+        var ab = new ArrayBuffer(byteString.length);
+        var ia = new Uint8Array(ab);
+
+        for (var i = 0; i < byteString.length; i++) {
+          ia[i] = byteString.charCodeAt(i);
+        }
+
+        return new Blob([ab], { type: "image/png" }); // Change the type if needed
       }
     </script>
   </body>

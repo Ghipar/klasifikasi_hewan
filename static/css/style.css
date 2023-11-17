@@ -1,36 +1,252 @@
-/* audio {
+body,
+html {
+  height: 100%;
+  margin: 0;
+}
+* {
+  box-sizing: border-box;
+}
+.bg {
+  background-image: url("../img/bg.png");
+  height: 100%;
+  width: 100%;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-attachment: fixed;
+  flex-direction: row-reverse;
+}
+
+.column {
+  float: left;
+  width: 50%;
+  padding: 10px;
+}
+.column2 {
+  /* display: flex; */
+  float: left;
+  width: 50%;
+  padding: 10px;
+  order: 1;
+}
+.inputan {
+  margin-left: 10%;
+  width: max-content;
+  display: inline;
+}
+
+.bg::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+#koin {
+  background-image: url("../img/indokotak.png");
+  height: 100px;
+  width: 400px;
+  background-size: 100% 100%;
+  margin-left: 10%;
   display: none;
-} */
+  justify-content: center;
+  align-items: flex-end;
+  flex-direction: row-reverse;
+  order: 1;
+}
+#koen {
+  background-image: url("../img/enkotak.png");
+  height: 100px;
+  width: 400px;
+  background-size: 100% 100%;
+  margin-left: 10%;
+  display: none;
+  justify-content: center;
+  align-items: flex-end;
+  flex-direction: row-reverse;
+  order: 1;
+}
+
+h1 {
+  margin-left: 0%;
+  letter-spacing: 2px;
+  color: #054502;
+}
 
 #video-container {
-  width: 640px; /* Set your desired width */
-  height: 480px; /* Set your desired height */
+  width: 580px;
+  height: 400px;
   position: relative;
-  border: 5px solid #054502; /* Old green color border */
-  border-radius: 50px; /* Rounded corners */
+  border: 5px solid #054502;
+  border-radius: 50px;
   overflow: hidden;
+  margin-left: 40px;
+}
 
+#video-webcam {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
 }
 
 #video-container img {
   width: 100%;
   height: 100%;
+  object-fit: fill;
 }
 
 #take-picture-button {
   position: absolute;
-  bottom: 10px; /* Adjust the bottom distance as needed */
-  /* display: inline; */
+  bottom: 10px;
   left: 50%;
   transform: translateX(-50%);
-  /* visibility: hidden; */
 }
+
 #btnreset {
   margin-top: 20px;
-  margin-left: 20px;
+  padding: 0;
+  border: none;
+  background: none;
+}
+
+#in {
+  display: block;
+  margin-bottom: 5px;
+  height: 80px;
+  opacity: 0.8;
+}
+#en {
+  height: 80px;
+  opacity: 0.8;
+}
+
+#inGmbr {
+  margin-left: 48%;
+  text-decoration: underline;
+  letter-spacing: 2px;
+  color: #054502;
+  font-weight: bold;
 }
 #file-input {
+  display: none;
   color: transparent;
-  margin-left: 27%;
-  margin-top: 3%;
+  margin-right: 0%;
+  right: 0%;
+}
+
+.btn {
+  position: absolute;
+  margin-top: 2%;
+  margin-left: 5.5%;
+}
+.btn:hover,
+input:hover {
+  opacity: 1 !important;
+}
+/* #in:hover{
+  opacity: 1 !important;
+} */
+
+/* Responsive css */
+@media (max-width: 500px) {
+  .bg {
+    background-image: url("../img/bgmb.png");
+    height: 100%;
+    width: 100%;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-attachment: scroll;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+  }
+  .btn {
+    position: absolute;
+    margin-top: 2%;
+  }
+  #in {
+    display: block;
+    margin-bottom: 5px;
+    height: 60px;
+    opacity: 0.8;
+  }
+  #en {
+    height: 60px;
+    opacity: 0.8;
+  }
+  .inputan {
+    width: max-content;
+  }
+
+  #inGmbr {
+    text-decoration: underline;
+    letter-spacing: 2px;
+    color: #054502;
+    font-weight: bold;
+  }
+
+  .column2 {
+    order: -1;
+    float: none;
+    width: 50%;
+    padding: 10px;
+  }
+
+  .column {
+    float: left;
+    width: 100%;
+    padding: 10px;
+  }
+
+  #koin {
+    align-items: center;
+    background-image: url("../img/indokotak.png");
+    height: 100px;
+    width: 400px;
+    background-size: 100% 100%;
+    margin-left: -50%;
+    display: none;
+    justify-content: center;
+    align-items: flex-end;
+    flex-direction: row-reverse;
+    order: -1;
+  }
+  #koen {
+    background-image: url("../img/enkotak.png");
+    height: 100px;
+    width: 400px;
+    background-size: 100% 100%;
+    margin-left: -50%;
+    display: none;
+    justify-content: center;
+    align-items: flex-end;
+    flex-direction: row-reverse;
+    order: -1;
+  }
+
+  .bg::after {
+    content: none;
+  }
+
+  #video-container {
+    margin-top: 10%;
+    width: 350px;
+    height: 280px;
+    position: relative;
+    border: 5px solid #054502;
+    border-radius: 50px;
+    overflow: hidden;
+    margin-left: 10%;
+  }
+
+  #video-webcam {
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+  }
+
+  #video-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+  }
 }

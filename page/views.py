@@ -1,59 +1,86 @@
+import base64
 from django.shortcuts import render
-from django.core.files.storage import FileSystemStorage
-from keras.models import load_model
 from keras.preprocessing import image
 from fastai.vision.all import *
 import json
-import tensorflow as tf
-from tensorflow import Graph
-import numpy as np
 import io
 from django.http import HttpResponse
+import firebase_admin
+from firebase_admin import credentials, firestore
+from PIL import Image
 
 names = json.load(open("./file/translate.json"))
-model= load_learner('./file/model.pkl')
+model = load_learner("./file/model.pkl")
+cred = credentials.Certificate("./file/firebaseKey.json")
+app = firebase_admin.initialize_app(cred)
+db = firestore.client()
+
 
 def index(request):
-    context = {'a':1}
-    return render(request, 'index.html', context)
+    context = {"a": 1}
+    return render(request, "index.html", context)
+
+
 def predictId(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         try:
-            print(request.FILES['gmbr'])
             # Get and load the image
-            file_obj = request.FILES['gmbr']
+            file_obj = request.FILES["gmbr"]
             # Use the uploaded image directly without saving it
             image_data = file_obj.read()
-            img = image.load_img(io.BytesIO(image_data), target_size=(200, 200))
+
+            img = Image.open(io.BytesIO(image_data)).convert('RGB')
+            img = img.resize((200, 200))
+            img_str = base64.b64encode(img.tobytes())
+            # print(image_data)
             # Predict
             pred = model.predict(img)
             # Post values to HTML
             predId = names[pred[0]]["id"]
-           
+
+            data = {
+                    "image": img_str,
+                    "prediction": predId,
+                    "time_added": firestore.SERVER_TIMESTAMP,
+            }
+            doc = db.collection("preds").document()
+            doc.set(data)
+     
             return HttpResponse(predId)
 
         except Exception as e:
             print(f"Error processing the uploaded file: {e}")
-     
+
     return HttpResponse(predId)
 
+
 def predictEn(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         try:
             # Get and load the image
-            file_obj = request.FILES['gmbr']
+            file_obj = request.FILES["gmbr"]
             # Use the uploaded image directly without saving it
             image_data = file_obj.read()
-            img = image.load_img(io.BytesIO(image_data), target_size=(200, 200))
+            img = Image.open(io.BytesIO(image_data)).convert('RGB')
+            img = img.resize((200, 200))
+            img_str = base64.b64encode(img.tobytes())
+           
             # Predict
             pred = model.predict(img)
             # Post values to HTML
             predEn = names[pred[0]]["en"]
-           
+
+            data = {
+                    "image": img_str,
+                    "prediction": predEn,
+                    "time_added": firestore.SERVER_TIMESTAMP,
+            }
+            doc = db.collection("preds").document()
+            doc.set(data)
+
             return HttpResponse(predEn)
 
         except Exception as e:
             print(f"Error processing the uploaded file: {e}")
-     
+
     return HttpResponse(predEn)
-    
