@@ -1,252 +1,234 @@
-body,
-html {
-  height: 100%;
-  margin: 0;
-}
 * {
-  box-sizing: border-box;
-}
-.bg {
-  background-image: url("../img/bg.png");
-  height: 100%;
-  width: 100%;
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  background-attachment: fixed;
-  flex-direction: row-reverse;
+    margin: 0;
 }
 
-.column {
-  float: left;
-  width: 50%;
-  padding: 10px;
-}
-.column2 {
-  /* display: flex; */
-  float: left;
-  width: 50%;
-  padding: 10px;
-  order: 1;
-}
-.inputan {
-  margin-left: 10%;
-  width: max-content;
-  display: inline;
+body {
+    background-color: #E3EDBC;
 }
 
-.bg::after {
-  content: "";
-  display: table;
-  clear: both;
-}
-
-#koin {
-  background-image: url("../img/indokotak.png");
-  height: 100px;
-  width: 400px;
-  background-size: 100% 100%;
-  margin-left: 10%;
-  display: none;
-  justify-content: center;
-  align-items: flex-end;
-  flex-direction: row-reverse;
-  order: 1;
-}
-#koen {
-  background-image: url("../img/enkotak.png");
-  height: 100px;
-  width: 400px;
-  background-size: 100% 100%;
-  margin-left: 10%;
-  display: none;
-  justify-content: center;
-  align-items: flex-end;
-  flex-direction: row-reverse;
-  order: 1;
-}
-
-h1 {
-  margin-left: 0%;
-  letter-spacing: 2px;
-  color: #054502;
-}
-
-#video-container {
-  width: 580px;
-  height: 400px;
-  position: relative;
-  border: 5px solid #054502;
-  border-radius: 50px;
-  overflow: hidden;
-  margin-left: 40px;
-}
-
-#video-webcam {
-  width: 100%;
-  height: 100%;
-  object-fit: fill;
-}
-
-#video-container img {
-  width: 100%;
-  height: 100%;
-  object-fit: fill;
-}
-
-#take-picture-button {
-  position: absolute;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-#btnreset {
-  margin-top: 20px;
-  padding: 0;
-  border: none;
-  background: none;
-}
-
-#in {
-  display: block;
-  margin-bottom: 5px;
-  height: 80px;
-  opacity: 0.8;
-}
-#en {
-  height: 80px;
-  opacity: 0.8;
-}
-
-#inGmbr {
-  margin-left: 48%;
-  text-decoration: underline;
-  letter-spacing: 2px;
-  color: #054502;
-  font-weight: bold;
-}
-#file-input {
-  display: none;
-  color: transparent;
-  margin-right: 0%;
-  right: 0%;
-}
-
-.btn {
-  position: absolute;
-  margin-top: 2%;
-  margin-left: 5.5%;
-}
-.btn:hover,
-input:hover {
-  opacity: 1 !important;
-}
-/* #in:hover{
-  opacity: 1 !important;
-} */
-
-/* Responsive css */
-@media (max-width: 500px) {
-  .bg {
-    background-image: url("../img/bgmb.png");
-    height: 100%;
-    width: 100%;
+.main-container
+{
+    height: 100vh;
+    background-image: url(../img/bg.png);
+    background-size: cover;
     background-repeat: no-repeat;
-    background-size: 100% 100%;
-    background-attachment: scroll;
-    align-items: center;
-    justify-content: center;
-    display: flex;
-    flex-direction: column;
-  }
-  .btn {
-    position: absolute;
-    margin-top: 2%;
-  }
-  #in {
-    display: block;
-    margin-bottom: 5px;
-    height: 60px;
-    opacity: 0.8;
-  }
-  #en {
-    height: 60px;
-    opacity: 0.8;
-  }
-  .inputan {
-    width: max-content;
-  }
-
-  #inGmbr {
-    text-decoration: underline;
-    letter-spacing: 2px;
-    color: #054502;
     font-weight: bold;
-  }
+    padding: 10px 0;
+}
 
-  .column2 {
-    order: -1;
-    float: none;
-    width: 50%;
-    padding: 10px;
-  }
-
-  .column {
-    float: left;
-    width: 100%;
-    padding: 10px;
-  }
-
-  #koin {
-    align-items: center;
-    background-image: url("../img/indokotak.png");
-    height: 100px;
-    width: 400px;
-    background-size: 100% 100%;
-    margin-left: -50%;
-    display: none;
-    justify-content: center;
-    align-items: flex-end;
-    flex-direction: row-reverse;
-    order: -1;
-  }
-  #koen {
-    background-image: url("../img/enkotak.png");
-    height: 100px;
-    width: 400px;
-    background-size: 100% 100%;
-    margin-left: -50%;
-    display: none;
-    justify-content: center;
-    align-items: flex-end;
-    flex-direction: row-reverse;
-    order: -1;
-  }
-
-  .bg::after {
-    content: none;
-  }
-
-  #video-container {
-    margin-top: 10%;
-    width: 350px;
-    height: 280px;
+.video-container
+{
     position: relative;
-    border: 5px solid #054502;
+}
+
+.video-container video
+{
+    width: 80%;
+    margin: 10px;
     border-radius: 50px;
-    overflow: hidden;
-    margin-left: 10%;
-  }
+    border: 3px solid #054502;
+}
 
-  #video-webcam {
-    width: 100%;
-    height: 100%;
+.video-container img
+{
+    width: 80%;
+    max-height: 60vh;
+    border-radius: 50px;
+    border: 3px solid #054502;
     object-fit: fill;
-  }
+}
 
-  #video-container img {
-    width: 100%;
-    height: 100%;
-    object-fit: fill;
-  }
+.video-container #take-picture-button
+{
+    position: absolute;
+    bottom: 8%;
+    left: 35%;
+    border: 0px;
+}
+
+.button-container
+{
+    margin-bottom: 20px;
+}
+
+.button-container img
+{
+    cursor: pointer;
+    display: inline;
+    margin-left: 10px;
+    width: 50px;
+}
+
+.button-container .custom-file-upload
+{
+    cursor: pointer;
+    display: inline;
+}
+
+.button-container .custom-file-upload span
+{
+    font-size: 20px;
+    margin-left: 50%;
+    text-decoration: underline;
+}
+
+.button-container .custom-file-upload input
+{
+    display: none;
+}
+
+
+.language-container
+{
+    font-family: 'KG Primary Penmanship';
+    font-size: 18px;
+    color: #FFFFFF;
+}
+
+.language-container .button-language
+{
+    width: 80%;
+    background-color: #2F6D30;
+    border-radius: 50px;
+    padding: 20px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.language-container .button-language:hover
+{
+    width: 80%;
+    background-color: #2F6D30;
+    opacity: 0.80;
+    border-radius: 50px;
+    padding: 20px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.language-container .button-language:last-child
+{
+    width: 80%;
+    background-color: #97AD50;
+    border-radius: 50px;
+    padding: 20px;
+    margin-bottom: 10px;
+}
+
+.language-container .button-language img
+{
+    display: inline-block;
+    width: 10%;
+}
+
+.language-container .button-language div
+{
+    display: inline-block;
+    width: 85%;
+    text-align: center;
+}
+
+.papan-container
+{
+    text-align: center;
+}
+.papan-container img
+{
+    width: 80%;
+}
+.prediction-box-container
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.prediction-box
+{
+    display: none;
+    width: 80%;
+    height: 20vh;
+    text-align: center;
+    font-size: 20px;
+    font-family: 'KG Primary Penmanship';
+    justify-content: center;
+    align-items: center;
+}
+
+#predBoxEN {
+    background-image: url(../img/enkotak.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+#predBoxID {
+    background-image: url(../img/indokotak.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.prediction-box span
+{
+    position: relative;
+    top: 40%;
+}
+
+@media screen and (max-width: 768px) {
+
+    .video-container
+    {
+        text-align: center;
+    }
+
+    .video-container #take-picture-button
+    {
+        position: absolute;
+        bottom: 8%;
+        left: 45%;
+        border: 0px;
+    }
+
+    .button-container
+    {
+        text-align: center;
+    }
+
+    .language-container
+    {
+        position: relative;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .prediction-box span
+    {
+        position: relative;
+        top: 20%;
+    }
+
+    .order-flex-small-1
+    {
+        order: 1!important;
+    }
+
+    .order-flex-small-2
+    {
+        order: 2!important;
+    }
+    
+    .language-container
+    {
+        font-family: 'KG Primary Penmanship';
+        font-size: 15px;
+        color: #FFFFFF;
+    }
+
+    .main-container
+    {
+        height: 100%;
+        background-image: url(../img/bgmb.png);
+        background-size: cover;
+        background-repeat: no-repeat;
+        font-weight: bold;
+        padding: 10px 0;
+    }
 }
