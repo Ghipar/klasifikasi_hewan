@@ -21,8 +21,8 @@
                   Browser tidak mendukung, silahkan update!!
                 </video>
                 <img
-                style="height: 80px; width: 80px"
-                src="{% static 'img/ic_capture.png' %}"
+                  style="height: 80px; width: 80px"
+                  src="{% static 'img/ic_capture.png' %}"
                   alt=""
                   id="take-picture-button"
                   onclick="takeSnapshot()"
@@ -65,9 +65,6 @@
                 <span id="nameId">{{ predId }}</span>
               </div>
             </div>
-            <div class="col-xl-12">
-              
-            </div>
           </div>
         </div>
       </div>
@@ -101,12 +98,7 @@
 
 
 
-      navigator.getUserMedia =
-        navigator.getUserMedia ||
-        navigator.webkitGetUserMedia ||
-        navigator.mozGetUserMedia ||
-        navigator.msGetUserMedia ||
-        navigator.oGetUserMedia;
+      navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.oGetUserMedia;
 
       if (navigator.getUserMedia) {
         navigator.getUserMedia({ video: true }, handleVideo, videoError);

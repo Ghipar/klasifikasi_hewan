@@ -24,6 +24,7 @@ body {
 .video-container video
 {
     width: 80%;
+    height: auto;
     margin: 10px;
     border-radius: 50px;
     border: 3px solid #054502;
@@ -32,7 +33,7 @@ body {
 .video-container img
 {
     width: 80%;
-    max-height: 60vh;
+    height: 63vh;
     border-radius: 50px;
     border: 3px solid #054502;
     object-fit: fill;
@@ -92,6 +93,7 @@ body {
     border-radius: 50px;
     padding: 20px;
     margin-bottom: 10px;
+    margin-left: 3%;
     cursor: pointer;
 }
 
@@ -132,23 +134,26 @@ body {
 {
     text-align: center;
 }
+
 .papan-container img
 {
     width: 80%;
 }
+
 .prediction-box-container
 {
     display: flex;
     justify-content: center;
     align-items: center;
 }
+
 .prediction-box
 {
     display: none;
     width: 80%;
     height: 20vh;
     text-align: center;
-    font-size: 20px;
+    font-size: 24px;
     font-family: 'KG Primary Penmanship';
     justify-content: center;
     align-items: center;
@@ -157,12 +162,14 @@ body {
 #predBoxEN {
     background-image: url(../img/enkotak.png);
     background-size: contain;
+    background-position: center;
     background-repeat: no-repeat;
 }
 
 #predBoxID {
     background-image: url(../img/indokotak.png);
     background-size: contain;
+    background-position: center;
     background-repeat: no-repeat;
 }
 
@@ -202,7 +209,7 @@ body {
     .prediction-box span
     {
         position: relative;
-        top: 20%;
+        top: 40%;
     }
 
     .order-flex-small-1
@@ -230,5 +237,36 @@ body {
         background-repeat: no-repeat;
         font-weight: bold;
         padding: 10px 0;
+    }
+
+    .video-container video
+    {
+        width: 80%;
+        height: auto;
+        margin: 10px;
+        border-radius: 50px;
+        border: 3px solid #054502;
+    }
+
+    .video-container img
+    {
+        width: 80%;
+        height: auto;
+        max-height: 63vh;
+        border-radius: 50px;
+        border: 3px solid #054502;
+        object-fit: fill;
+    }
+
+    .prediction-box
+    {
+        display: none;
+        width: 80%;
+        height: 20vh;
+        text-align: center;
+        font-size: 20px;
+        font-family: 'KG Primary Penmanship';
+        justify-content: center;
+        align-items: center;
     }
 }
