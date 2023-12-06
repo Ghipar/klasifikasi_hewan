@@ -128,7 +128,7 @@
         });
 
         $("#audioENButton").on("click", function(){
-          audioElementID.src = "{% static 'audios/En/' %}" + dataEN + ".mp3";
+          audioElementEN.src = "{% static 'audios/En/' %}" + dataEN + ".mp3";
           predictionIdBox.style.display = "none";
           predictionEnBox.style.display = "block";
         });
@@ -285,6 +285,8 @@
       }
 
       function resetSnapshot() {
+        const audioElementID = document.getElementById("myAudioId");
+        const audioElementEN = document.getElementById("myAudioEn");
         var videoContainer = document.getElementById("video-container");
         videoContainer.innerHTML = "";
         videoContainer.innerHTML =
@@ -301,6 +303,9 @@
         $("#nameEn").html("");
         // Move the "Take Picture" button back inside the container
         videoContainer.appendChild(takePictureButton);
+
+        audioElementID.src = "";
+        audioElementEN.src = "";
 
       }
 

@@ -43,8 +43,8 @@ def predictId(request):
                     "prediction": predId,
                     "time_added": firestore.SERVER_TIMESTAMP,
             }
-            doc = db.collection("preds").document()
-            doc.set(data)
+            
+            firebase_store_data(data)
      
             return HttpResponse(predId)
 
@@ -75,8 +75,8 @@ def predictEn(request):
                     "prediction": predEn,
                     "time_added": firestore.SERVER_TIMESTAMP,
             }
-            doc = db.collection("preds").document()
-            doc.set(data)
+
+            firebase_store_data(data)
 
             return HttpResponse(predEn)
 
@@ -84,3 +84,10 @@ def predictEn(request):
             print(f"Error processing the uploaded file: {e}")
 
     return HttpResponse(predEn)
+
+
+async def firebase_store_data(data):
+    doc = db.collection("preds").document()
+    doc.set(data)
+
+    return true
