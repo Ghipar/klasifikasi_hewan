@@ -4,6 +4,7 @@ from keras.preprocessing import image
 from fastai.vision.all import *
 import json
 import io
+import asyncio
 from django.http import HttpResponse
 import firebase_admin
 from firebase_admin import credentials, firestore
@@ -12,7 +13,8 @@ from PIL import Image
 names = json.load(open("./file/translate.json"))
 model = load_learner("./file/model.pkl")
 cred = credentials.Certificate("./file/firebaseKey.json")
-app = firebase_admin.initialize_app(cred)
+firebase_admin.initialize_app(cred)
+
 db = firestore.client()
 
 
@@ -44,7 +46,10 @@ def predictId(request):
                     "time_added": firestore.SERVER_TIMESTAMP,
             }
             
-            firebase_store_data(data)
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            result = loop.run_until_complete(firebase_store_data(data))
+            loop.close()
      
             return HttpResponse(predId)
 
@@ -76,7 +81,10 @@ def predictEn(request):
                     "time_added": firestore.SERVER_TIMESTAMP,
             }
 
-            firebase_store_data(data)
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            result = loop.run_until_complete(firebase_store_data(data))
+            loop.close()
 
             return HttpResponse(predEn)
 
@@ -87,7 +95,7 @@ def predictEn(request):
 
 
 async def firebase_store_data(data):
-    doc = db.collection("preds").document()
-    doc.set(data)
+    doc = db.collection("preds")
+    doc.add(data)
 
     return true

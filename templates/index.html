@@ -140,67 +140,69 @@
 
       function SetPrediction(){
         var video = document.querySelector("#video-webcam");
-          var fileInput = document.querySelector("#file-input");
-          var takePictureButton = document.querySelector("#take-picture-button");
+        var fileInput = document.querySelector("#file-input");
+        var takePictureButton = document.querySelector("#take-picture-button");
 
-          navigator.getUserMedia =
-            navigator.getUserMedia ||
-            navigator.webkitGetUserMedia ||
-            navigator.mozGetUserMedia ||
-            navigator.msGetUserMedia ||
-            navigator.oGetUserMedia;
+        navigator.getUserMedia =
+          navigator.getUserMedia ||
+          navigator.webkitGetUserMedia ||
+          navigator.mozGetUserMedia ||
+          navigator.msGetUserMedia ||
+          navigator.oGetUserMedia;
 
-          if (navigator.getUserMedia) {
-            navigator.getUserMedia({ video: true }, handleVideo, videoError);
-          }
+        if (navigator.getUserMedia) {
+          navigator.getUserMedia({ video: true }, handleVideo, videoError);
+        }
 
-          const audioElementID = document.getElementById("myAudioId");
-          const audioElementEN = document.getElementById("myAudioEn");
+        const audioElementID = document.getElementById("myAudioId");
+        const audioElementEN = document.getElementById("myAudioEn");
 
-          var formData = new FormData($("#myForm")[0]); // Create a FormData object from the form
-          formData.append(
-            "csrfmiddlewaretoken",
-            $("input[name=csrfmiddlewaretoken]").val()
-          ); // Include the CSRF token
+        var formData = new FormData($("#myForm")[0]); // Create a FormData object from the form
+        formData.append(
+          "csrfmiddlewaretoken",
+          $("input[name=csrfmiddlewaretoken]").val()
+        ); // Include the CSRF token
 
-          formData.append("gmbr", $("#file-input")[0].files[0]);
+        formData.append("gmbr", $("#file-input")[0].files[0]);
 
-          // var buttonValue = $(this).val(); // Get the value of the clicked button
 
-          $.ajax({
-              type: "POST",
-              url: "{% url 'predictId' %}",
-              data: formData,
-              processData: false,
-              contentType: false,
-              success: function (data) {
-                console.log(data);
-                $("#nameId").html(data);
-                dataID = data;
-              },
-              error: function (xhr, status, error) {
-                console.error(xhr, status, error);
-              },
-          });
+        // var buttonValue = $(this).val(); // Get the value of the clicked button
 
-          $.ajax({
+        $.ajax({
             type: "POST",
-            url: "{% url 'predictEn' %}",
+            url: "{% url 'predictId' %}",
             data: formData,
             processData: false,
             contentType: false,
             success: function (data) {
               console.log(data);
-              $("#nameEn").html(data);
-              dataEN = data;
+              $("#nameId").html(data);
+              dataID = data;
             },
             error: function (xhr, status, error) {
               console.error(xhr, status, error);
             },
-          });
+        });
+
+        $.ajax({
+          type: "POST",
+          url: "{% url 'predictEn' %}",
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function (data) {
+            console.log(data);
+            $("#nameEn").html(data);
+            dataEN = data;
+          },
+          error: function (xhr, status, error) {
+            console.error(xhr, status, error);
+          },
+        });
       }
 
       function loadImage() {
+        resetSnapshot();
         var file = fileInput.files[0];
         if (file) {
           var img = document.createElement("img");
@@ -221,6 +223,8 @@
           console.error("Video element not found.");
           return;
         }
+
+        resetSnapshot();
 
         var canvas = document.createElement("canvas");
         var context = canvas.getContext("2d");
