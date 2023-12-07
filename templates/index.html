@@ -59,10 +59,10 @@
             </div>
             <div class="col-xl-12 prediction-box-container">
               <div class="prediction-box" id="predBoxEN">
-                <span id="nameEn">{{ predEn }}</span>
+                <span id="nameEn">Loading...</span>
               </div>
               <div class="prediction-box" id="predBoxID">
-                <span id="nameId">{{ predId }}</span>
+                <span id="nameId">Loading...</span>
               </div>
             </div>
           </div>
@@ -93,8 +93,12 @@
       var takePictureButton = document.querySelector("#take-picture-button");
       var dataID = "";
       var dataEN = "";
+      var videoContainer = document.getElementById("video-container");
+          
       const predictionIdBox = document.getElementById("predBoxID");
       const predictionEnBox = document.getElementById("predBoxEN");
+      const nameEn = document.getElementById("nameEn");
+      const nameId = document.getElementById("nameId");
 
 
 
@@ -120,19 +124,32 @@
       $(document).ready(function(){
         const audioElementID = document.getElementById("myAudioId");
         const audioElementEN = document.getElementById("myAudioEn");
-
+        
         $("#audioIDButton").on("click", function(){
-          audioElementID.src = "{% static 'audios/Id/' %}" + dataID + ".mp3";
-          predictionEnBox.style.display = "none";
-          predictionIdBox.style.display = "block";
+          let imgElement = videoContainer.querySelector(".img-container");
+          if(!imgElement){
+            alert("Gambar tidak ditemukan!!");
+          } else {
+            audioElementID.src = "{% static 'audios/Id/' %}" + dataID + ".mp3";
+            predictionEnBox.style.display = "none";
+            predictionIdBox.style.display = "block";
+            let nameindo = nameId.textContent;
+            nameindo = ""? "Loading...":"{{ predId }}";
+          }
         });
 
         $("#audioENButton").on("click", function(){
-          audioElementEN.src = "{% static 'audios/En/' %}" + dataEN + ".mp3";
-          predictionIdBox.style.display = "none";
-          predictionEnBox.style.display = "block";
+          let imgElement = videoContainer.querySelector(".img-container");
+          if(!imgElement){
+            alert("Gambar tidak ditemukan!!");
+          } else {
+            audioElementEN.src = "{% static 'audios/En/' %}" + dataEN + ".mp3";
+            predictionIdBox.style.display = "none";
+            predictionEnBox.style.display = "block";
+            let nameenge = nameEn.textContent;
+            nameEn = ""? "Loading...":"{{ predEn }}"
+          }
         });
-
         $("#btnreset").on("click", function(){
           resetSnapshot();
         });
@@ -207,6 +224,7 @@
         if (file) {
           var img = document.createElement("img");
           img.src = URL.createObjectURL(file);
+          img.className = "img-container";
 
           var videoContainer = document.getElementById("video-container");
           videoContainer.innerHTML = "";
@@ -219,12 +237,11 @@
       }
 
       function takeSnapshot() {
+        // resetSnapshot()
         if (!video) {
           console.error("Video element not found.");
           return;
         }
-
-        resetSnapshot();
 
         var canvas = document.createElement("canvas");
         var context = canvas.getContext("2d");
@@ -292,6 +309,8 @@
         const audioElementID = document.getElementById("myAudioId");
         const audioElementEN = document.getElementById("myAudioEn");
         var videoContainer = document.getElementById("video-container");
+        dataEN =  "";
+        dataID = "";
         videoContainer.innerHTML = "";
         videoContainer.innerHTML =
           '<video autoplay="true" id="video-webcam">Browsermu tidak mendukung bro, upgrade donk!</video>';
@@ -303,8 +322,8 @@
 
         predictionIdBox.style.display = "none";
         predictionEnBox.style.display = "none";
-        $("#nameId").html("");
-        $("#nameEn").html("");
+        $("#nameId").html("Loading...");
+        $("#nameEn").html("Loading...");
         // Move the "Take Picture" button back inside the container
         videoContainer.appendChild(takePictureButton);
 
