@@ -1,349 +1,196 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Klasifikasi hewan</title>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Klasifikasi Hewan</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
     <link href="https://fonts.cdnfonts.com/css/kg-primary-penmanship-lined" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-  </head>
-  <body>
-    <div class="container-fluid main-container">
-      <div class="row">
-        <div class="col-xl-6 col-md-6 col-sm-12 order-xl-1 order-md-1 order-sm-2 order-flex-small-2">
-          <form method="post" enctype="multipart/form-data" id="myForm">
-            {% csrf_token %}
-            <div class="row">
-              <div class="video-container col-xl-12 col-sm-12 col-md-12" id="video-container">
-                <video autoplay="true" id="video-webcam">
-                  Browser tidak mendukung, silahkan update!!
-                </video>
-                <img
-                  style="height: 80px; width: 80px"
-                  src="{% static 'img/ic_capture.png' %}"
-                  alt=""
-                  id="take-picture-button"
-                  onclick="takeSnapshot()"
-                />
-              </div>
-              <div class="button-container col-xl-12">
-                <img src="{% static 'img/ic_refresh.png' %}" id="btnreset" alt="">
-                <label for="file-input" class="custom-file-upload">
-                  <span>Import Galery</span>
-                  <input type="file" id="file-input" accept="image/*" onchange="loadImage()" name="gmbr">
-                </label>
-              </div>
-              <div class="language-container col-xl-12 row">
-                <div class="button-language col-xl-12" id="audioENButton">
-                  <div>
-                    <span>Bahasa Inggris</span>
-                  </div>
-                  <img src="{% static 'img/ic_sound.png' %}" alt="">
-                </div>
-                <div class="button-language col-xl-12" id="audioIDButton">
-                  <div>
-                    <span>Bahasa Indonesia</span>
-                  </div>
-                  <img src="{% static 'img/ic_sound.png' %}" alt="">
-                </div>
-              </div>
-            </div>
-          </form>
-        </div>
-        <div class=" prediction-container col-xl-6 col-md-6 col-sm-12 order-xl-2 order-md-2 order-sm-1 order-flex-small-1">
-          <div class="row">
-            <div class="col-xl-12 papan-container">
-              <img src="{% static 'img/title_img.png' %}" alt="">
-            </div>
-            <div class="col-xl-12 prediction-box-container">
-              <div class="prediction-box" id="predBoxEN">
-                <span id="nameEn">Loading...</span>
-              </div>
-              <div class="prediction-box" id="predBoxID">
-                <span id="nameId">Loading...</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <audio id="myAudioId" autoplay>
-        <source
-          src=""
-          type="audio/mpeg"
-        />
-        Your browser does not support the audio element.
-      </audio>
-      <audio id="myAudioEn" autoplay>
-        <source
-          src=""
-          type="audio/mpeg"
-        />
-        Your browser does not support the audio element.
-      </audio>
-    </div>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-    <script src="{% static "js/script.js" %}"></script>
-    <script type="text/javascript">
-      var video = document.querySelector("#video-webcam");
-      var fileInput = document.querySelector("#file-input");
-      var takePictureButton = document.querySelector("#take-picture-button");
-      var dataID = "";
-      var dataEN = "";
-      var videoContainer = document.getElementById("video-container");
-          
-      const predictionIdBox = document.getElementById("predBoxID");
-      const predictionEnBox = document.getElementById("predBoxEN");
-      const nameEn = document.getElementById("nameEn");
-      const nameId = document.getElementById("nameId");
+<body>
 
-
-
-      navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.oGetUserMedia;
-
-      if (navigator.getUserMedia) {
-        navigator.getUserMedia({ video: true }, handleVideo, videoError);
-      }
-
-      // document.getElementById("koin").style.display = "none";
-      // window.onbeforeunload = function () {
-      //   // Hide the div before the page is reloaded
-      // };
-      
-      function handleVideo(stream) {
-        video.srcObject = stream;
-      }
-
-      function videoError(e) {
-        alert("Izinkan menggunakan webcam untuk demo!");
-      }
-
-      $(document).ready(function(){
-        const audioElementID = document.getElementById("myAudioId");
-        const audioElementEN = document.getElementById("myAudioEn");
+    <div class="container-fluid">
         
-        $("#audioIDButton").on("click", function(){
-          let imgElement = videoContainer.querySelector(".img-container");
-          if(!imgElement){
-            alert("Gambar tidak ditemukan!!");
-          } else {
-            audioElementID.src = "{% static 'audios/Id/' %}" + dataID + ".mp3";
-            predictionEnBox.style.display = "none";
-            predictionIdBox.style.display = "block";
-            let nameindo = nameId.textContent;
-            nameindo = ""? "Loading...":"{{ predId }}";
-          }
-        });
+        <div class="row">
+         
+            <div class="col-lg-8 col-md-8 col-sm-12 container-large">
+                <form method="post" enctype="multipart/form-data" id="myForm">
+                    {% csrf_token %}
+                    <img class="koalaLogo" src="{% static 'img/koala.png' %}" alt="">
+                    <img id="languageLogo" src="{% static 'img/ic_language.png' %}" alt="">
 
-        $("#audioENButton").on("click", function(){
-          let imgElement = videoContainer.querySelector(".img-container");
-          if(!imgElement){
-            alert("Gambar tidak ditemukan!!");
-          } else {
-            audioElementEN.src = "{% static 'audios/En/' %}" + dataEN + ".mp3";
-            predictionIdBox.style.display = "none";
-            predictionEnBox.style.display = "block";
-            let nameenge = nameEn.textContent;
-            nameEn = ""? "Loading...":"{{ predEn }}"
-          }
-        });
-        $("#btnreset").on("click", function(){
-          resetSnapshot();
-        });
-      });
+                    <center>
+                        <div class="titleContainer">
+                            <img class="titleLogo" src="{% static 'img/bgLogo.png' %}" alt="">
+                            <div class="titleTextContainer">
+                                <h3 id="text1Logo">Pengenalan</h3>
+                                <h3 id="text2Logo">Hewan</h3>
+                            </div>
+                        </div>
+                        <!-- Bungkus dalam div relatif -->
+                        <div class="video-wrapper">
+                            <!-- Div merah di belakang frame kamera dan sejajar di tengah -->
+                            <div class="buttonBox">
+                                <div class="parentContainer">
+                                    <div class="childContainer">
+                                        <div id="btnreset" id class="Btn">
+                                            <img id="btnreset" src="{% static 'img/ic_reset.png' %}" alt="">
+                                            <h6 id="resBtn" style="margin: 0;padding: 0;">Ulang</h6>
+                                        </div>
+                                        <div id="import-image" class="Btn">
+                                            <img id="import-image" src="{% static 'img/ic_import.png' %}"
+                                                alt="Upload Image">
+                                            <input type="file" id="file-input" accept="image/*" onchange="loadImage()"
+                                                name="gmbr">
+                                            <h6 id="imgBtn" style="margin: 0;padding: 0; width: max-content;">Unggah Gambar</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="video-container" id="video-container">
+                                <video autoplay="true" id="video-webcam" autoplay muted playsinline>
+                                    Browser tidak mendukung, silahkan update!!
+                                </video>
+                                <img src="{% static 'img/ic_capture.png' %}" alt="" id="take-picture-button"
+                                    onclick="takeSnapshot()" />
+                            </div>
+                        </div>
+                    </center>
+                </form>
+                <audio id="myAudio">
+                    <source src="" type="audio/mpeg" />
+                    Your browser does not support the audio element.
+                </audio>
+                <audio id="myAudioAnimal">
+                    <source id="srcAudioIdAnimal" src="" type="audio/mpeg" />
+                    Your browser does not support the audio element.
+                </audio>
+                <img class="tumbuhanBiruLogo" src="{% static 'img/tumbuhan_biru.png' %}" alt="">
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12 container-small">
+                <img class="rumputLogo" src="{% static 'img/rumput.png' %}" alt="">
+                <div style="margin-top: 50px;">
+                    <img class="frameVideo" src="{% static 'img/frameVideo.png' %}" alt="">
+                    <div id="videoContainer">
+                        <video id="animalVideo" autoplay loop muted playsinline>
+                            <source id="animalVideo" src="" type="video/mp4">
+                            Browser tidak mendukung video.
+                        </video>
+                    </div>
+                    <div class="parentContainer">
+                        <div class="childContainer">
+                            <div id="titleAccuracy" class="titleAccuracy">Akurasi</div>
+                            <canvas style="display: none;" id="accuracyChart" width="100" height="100"></canvas>
+                            <div id="nolPersen">0%</div>
+                            <div id="confidence">0%</div>
+                        </div>
+                        <div class="column">
+                            <div class="resultContainer">
+                                <div id="titleResult" class="titleResult">Hasil</div>
+                                <div class="nameIdContainer" id="predBoxId">
+                                    <span id="name">Loading...</span>
+                                    <img class="speaker" src="{% static 'img/Speaker.png' %}" alt="">
+                                </div>
+                            </div>
+                            <div class="soundContainer">
+                                <div id="soundTitle" class="soundTitle">Suara Hewan</div>
+                                <div id="audio-player">
+                                    <img class="play-icon" src="{% static 'img/ic_play.png' %}" alt="Play">
+                                    <div class="waveform">
+                                        <div class="waveform">
+                                            <div class="wave-bar"></div>
+                                            <div class="wave-bar"></div>
+                                            <div class="wave-bar"></div>
+                                            <div class="wave-bar"></div>
+                                            <div class="wave-bar"></div>
+                                            <div class="wave-bar"></div>
+                                            <div class="wave-bar"></div>
+                                            <div class="wave-bar"></div>
+                                            <div class="wave-bar"></div>
+                                            <div class="wave-bar"></div>
+                                            <div class="wave-bar"></div>
+                                            <div class="wave-bar"></div>
+                                            <div class="wave-bar"></div>
+                                            <div class="wave-bar"></div>
+                                            <div class="wave-bar"></div>
+                                            <div class="wave-bar"></div>
+                                            <div class="wave-bar"></div>
+                                            <div class="wave-bar"></div>
+                                            <div class="wave-bar"></div>
+                                            <div class="wave-bar"></div>
+                                            <div class="wave-bar"></div>
+                                            <div class="wave-bar"></div>
+                                            <div class="wave-bar"></div>
+                                            <div class="wave-bar"></div>
+                                            <div class="wave-bar"></div>
+                                            <div class="wave-bar"></div>
+                                            <div class="wave-bar"></div>
+                                            <div class="wave-bar"></div>
+                                            <div class="wave-bar"></div>
+                                            <div class="wave-bar"></div>
+                                            <div class="wave-bar"></div>
+                                            <div class="wave-bar"></div>
+                                            <div class="wave-bar"></div>
+                                            <div class="wave-bar"></div>
+                                            <div class="wave-bar"></div>
+                                            <div class="wave-bar"></div>
+                                            <div class="wave-bar"></div>
+                                            <div class="wave-bar"></div>
+                                            <div class="wave-bar"></div>
+                                            <div class="wave-bar"></div>
+                                            <div class="wave-bar"></div>
+                                            <div class="wave-bar"></div>
+                                            <!-- Tambah lebih banyak kalo perlu -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="noSound">
+                                    <span id="noSoundText">Hewan tidak memiliki suara</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="myModal" class="mdl">
 
-      function SetPrediction(){
-        var video = document.querySelector("#video-webcam");
-        var fileInput = document.querySelector("#file-input");
-        var takePictureButton = document.querySelector("#take-picture-button");
+            <!-- Modal content -->
+            <div class="modalKonten">
+                <div class="languageTitleContainer">
+                    <img class="titleLogo" src="{% static 'img/bgLogo.png' %}" alt="">
+                    <div class="titleTextContainer">
+                        <h3 id="text1LgTitle">Pilih</h3>
+                        <h3 id="text2LgTitle"> Bahasa</h3>
+                    </div>
+                </div>
+                <button type="button" id="btnLgId" >BAHASA INDONESIA</button>
+                <button type="button" id="btnLgEn" >BAHASA INGGRIS</button>
+            </div>
+        
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+            integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            crossorigin="anonymous"></script>
+        <script src="{% static 'js/script.js' %}"></script>
+        <script>
+            // Variabel global buat nyimpen path statis
+            window.staticPath = "{% static '' %}"; // Base path statis, misalnya "/static/"
+            window.predictIdUrl = "{% url 'predictId' %}";
+            window.predictEnUrl = "{% url 'predictEn' %}";
+        </script>
+</body>
 
-        navigator.getUserMedia =
-          navigator.getUserMedia ||
-          navigator.webkitGetUserMedia ||
-          navigator.mozGetUserMedia ||
-          navigator.msGetUserMedia ||
-          navigator.oGetUserMedia;
 
-        if (navigator.getUserMedia) {
-          navigator.getUserMedia({ video: true }, handleVideo, videoError);
-        }
-
-        const audioElementID = document.getElementById("myAudioId");
-        const audioElementEN = document.getElementById("myAudioEn");
-
-        var formData = new FormData($("#myForm")[0]); // Create a FormData object from the form
-        formData.append(
-          "csrfmiddlewaretoken",
-          $("input[name=csrfmiddlewaretoken]").val()
-        ); // Include the CSRF token
-
-        formData.append("gmbr", $("#file-input")[0].files[0]);
-
-
-        // var buttonValue = $(this).val(); // Get the value of the clicked button
-
-        $.ajax({
-            type: "POST",
-            url: "{% url 'predictId' %}",
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function (data) {
-              console.log(data);
-              $("#nameId").html(data);
-              dataID = data;
-            },
-            error: function (xhr, status, error) {
-              console.error(xhr, status, error);
-            },
-        });
-
-        $.ajax({
-          type: "POST",
-          url: "{% url 'predictEn' %}",
-          data: formData,
-          processData: false,
-          contentType: false,
-          success: function (data) {
-            console.log(data);
-            $("#nameEn").html(data);
-            dataEN = data;
-          },
-          error: function (xhr, status, error) {
-            console.error(xhr, status, error);
-          },
-        });
-      }
-
-      function loadImage() {
-        resetSnapshot();
-        var file = fileInput.files[0];
-        if (file) {
-          var img = document.createElement("img");
-          img.src = URL.createObjectURL(file);
-          img.className = "img-container";
-
-          var videoContainer = document.getElementById("video-container");
-          videoContainer.innerHTML = "";
-          videoContainer.appendChild(img);
-
-          // Move the "Take Picture" button back inside the container
-          // videoContainer.appendChild(takePictureButton);
-          SetPrediction();
-        }
-      }
-
-      function takeSnapshot() {
-        // resetSnapshot()
-        if (!video) {
-          console.error("Video element not found.");
-          return;
-        }
-
-        var canvas = document.createElement("canvas");
-        var context = canvas.getContext("2d");
-
-        var width = video.offsetWidth;
-        var height = video.offsetHeight;
-
-        canvas.width = width;
-        canvas.height = height;
-
-        context.drawImage(video, 0, 0, width, height);
-
-        var img = document.createElement("img");
-        img.src = canvas.toDataURL("image/png");
-        img.className = "img-container"
-
-        var videoContainer = document.getElementById("video-container");
-        videoContainer.innerHTML = "";
-        videoContainer.appendChild(img);
-
-        var blob = dataURItoBlob(img.src);
-
-        var formData = new FormData($("#myForm")[0]); // Create a FormData object from the form
-          formData.append(
-            "csrfmiddlewaretoken",
-            $("input[name=csrfmiddlewaretoken]").val()
-          ); // Include the CSRF token
-
-          formData.append("gmbr", blob, "image.jpg");
-
-          $.ajax({
-              type: "POST",
-              url: "{% url 'predictId' %}",
-              data: formData,
-              processData: false,
-              contentType: false,
-              success: function (data) {
-                console.log(data);
-                $("#nameId").html(data);
-                dataID = data;
-              },
-              error: function (xhr, status, error) {
-                console.error(xhr, status, error);
-              },
-          });
-
-          $.ajax({
-            type: "POST",
-            url: "{% url 'predictEn' %}",
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function (data) {
-              console.log(data);
-              $("#nameEn").html(data);
-              dataEN = data;
-            },
-            error: function (xhr, status, error) {
-              console.error(xhr, status, error);
-            },
-          });
-      }
-
-      function resetSnapshot() {
-        const audioElementID = document.getElementById("myAudioId");
-        const audioElementEN = document.getElementById("myAudioEn");
-        var videoContainer = document.getElementById("video-container");
-        dataEN =  "";
-        dataID = "";
-        videoContainer.innerHTML = "";
-        videoContainer.innerHTML =
-          '<video autoplay="true" id="video-webcam">Browsermu tidak mendukung bro, upgrade donk!</video>';
-        video = document.querySelector("#video-webcam");
-
-        if (navigator.getUserMedia) {
-          navigator.getUserMedia({ video: true }, handleVideo, videoError);
-        }
-
-        predictionIdBox.style.display = "none";
-        predictionEnBox.style.display = "none";
-        $("#nameId").html("Loading...");
-        $("#nameEn").html("Loading...");
-        // Move the "Take Picture" button back inside the container
-        videoContainer.appendChild(takePictureButton);
-
-        audioElementID.src = "";
-        audioElementEN.src = "";
-
-      }
-
-      function dataURItoBlob(dataURI) {
-        var byteString = atob(dataURI.split(",")[1]);
-        var ab = new ArrayBuffer(byteString.length);
-        var ia = new Uint8Array(ab);
-
-        for (var i = 0; i < byteString.length; i++) {
-          ia[i] = byteString.charCodeAt(i);
-        }
-
-        return new Blob([ab], { type: "image/png" }); // Change the type if needed
-      }
-    </script>
-    
-  </body>
 </html>

@@ -35,11 +35,11 @@
         "en":"Whale", 
         "id":"Paus"
     },
-    "Hiu": {
+    "hiu": {
         "en":"Shark", 
         "id":"Hiu"
     },
-    "Gurita": {
+    "gurita": {
         "en":"Octopus", 
         "id":"Gurita"
     },
@@ -47,7 +47,7 @@
         "en":"Starfish", 
         "id":"Bintang laut"
     },
-    "Kupu-kupu": {
+    "kupu-kupu": {
         "en":"Butterfly", 
         "id":"Kupu-kupu"
     },
@@ -124,7 +124,7 @@
         "en":"Snake", 
         "id":"Ular"
     },
-    "beruang kutub": {
+    "beruangkutub": {
         "en":"Polarbear", 
         "id":"Beruang kutub"
     },
