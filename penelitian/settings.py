@@ -26,12 +26,13 @@ SECRET_KEY = "django-insecure-^g!=@=1@gkqo5=rnj!qtjlsrk0^x+e875628wyzj1=)%v*m$5@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [".vercel.app", ".now.sh", "127.0.0.1", "localhost", 
-                 "192.168.100.46", 
-                 "192.168.100.24",
-                 "172.20.10.4",
-                 "bison-loved-cod.ngrok-free.app"
-                 ]
+ALLOWED_HOSTS = ['*']
+# [".vercel.app", ".now.sh", "127.0.0.1", "localhost", 
+#                  "192.168.100.46", 
+#                  "192.168.100.24",
+#                  "172.20.10.4",
+#                  "bison-loved-cod.ngrok-free.app"
+#                  ]
 CSRF_TRUSTED_ORIGINS = [
     'https://bison-loved-cod.ngrok-free.app',  # Tambahkan domain Ngrok kamu
     'http://localhost:8000',  # Jika kamu juga menguji di lokal
@@ -58,6 +59,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = "penelitian.urls"
